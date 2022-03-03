@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_todo/const/routs.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,15 +12,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List todoList = [];
   String _newTodo = '';
-  void initFireBase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-  }
 
   @override
   void initState() {
     super.initState();
-    initFireBase();
     todoList.addAll(['Milk', 'Wash dishes', 'buy carrot']);
   }
 
@@ -39,7 +34,7 @@ class _HomeState extends State<Home> {
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, Routs.auth, (route) => false);
                 },
                 child: Text('Main Page')),
             Padding(padding: EdgeInsets.symmetric(vertical: 10)),
@@ -74,15 +69,12 @@ class _HomeState extends State<Home> {
                       // title: Text(todoList[index]),
                       title: Text(snapshot.data?.docs[index].get('item')),
                       trailing: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete_outline_rounded,
                           color: Colors.red,
                         ),
                         onPressed: () {
                           FirebaseFirestore.instance.collection('items').doc(snapshot.data?.docs[index].id).delete();
-                          // setState(() {
-                          //   todoList.removeAt(index);
-                          // });
                         },
                       ),
                     ),
@@ -90,9 +82,6 @@ class _HomeState extends State<Home> {
                   onDismissed: (direction) {
                     if (direction == DismissDirection.startToEnd) {
                       FirebaseFirestore.instance.collection('items').doc(snapshot.data?.docs[index].id).delete();
-                      // setState(() {
-                      //   todoList.removeAt(index);
-                      // });
                     }
                   },
                 );
@@ -143,5 +132,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-// Icon(Icons.star, size: 50, color: Theme.of(context).colorScheme.secondary,)

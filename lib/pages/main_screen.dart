@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/const/routs.dart';
+
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -9,22 +11,22 @@ class MainScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Text('main screen'),
+          const Text('main screen'),
           ElevatedButton(
               onPressed: (){
                 // Navigator.pushNamed(context, '/todo'); // have back button
                 // Navigator.pushNamedAndRemoveUntil(context, '/todo', (route)=>false); // if false haven't back button
-                Navigator.pushReplacementNamed(context, '/todo');
+                Navigator.pushReplacementNamed(context, Routs.todoFB);
               },
-              child: Text('go to todo with FB')
+              child: const Text('go to todo with FB')
           ),
           ElevatedButton(
               onPressed: (){
                 // Navigator.pushNamed(context, '/todo'); // have back button
                 // Navigator.pushNamedAndRemoveUntil(context, '/todo', (route)=>false); // if false haven't back button
-                Navigator.pushReplacementNamed(context, '/todo_state');
+                Navigator.pushReplacementNamed(context,  Routs.todoOnState);
               },
-              child: Text('go to todo on state')
+              child: const Text('go to todo on state')
           ),
         ],
       ),

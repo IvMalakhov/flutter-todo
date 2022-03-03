@@ -29,7 +29,7 @@ class _HomeOnStateState extends State<HomeOnState> {
   }
 
   void _showAddEditModal(
-      {bool edit = false, String text = '', int? indexForRemove}) {
+      {bool edit = false, String text = '', int? indexForEdit}) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -54,9 +54,9 @@ class _HomeOnStateState extends State<HomeOnState> {
                       )),
                   ElevatedButton(
                       onPressed: () {
-                        if (edit && indexForRemove != null) {
+                        if (edit && indexForEdit != null) {
                           setState(() {
-                            todoList[indexForRemove] = _newTodo;
+                            todoList[indexForEdit] = _newTodo;
                           });
                         } else {
                           setState(() {
@@ -137,7 +137,7 @@ class _HomeOnStateState extends State<HomeOnState> {
                               _showAddEditModal(
                                   text: todoList[index],
                                   edit: true,
-                                  indexForRemove: index);
+                                  indexForEdit: index);
                             },
                             icon: Icon(Icons.edit)),
                         IconButton(
