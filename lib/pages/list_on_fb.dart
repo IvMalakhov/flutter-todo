@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_todo/const/routs.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class ListOnFB extends StatefulWidget {
+  const ListOnFB({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<ListOnFB> createState() => _ListOnFBState();
 }
 
-class _HomeState extends State<Home> {
+class _ListOnFBState extends State<ListOnFB> {
   List todoList = [];
   String _newTodo = '';
 
   @override
   void initState() {
     super.initState();
-    todoList.addAll(['Milk', 'Wash dishes', 'buy carrot']);
+    todoList.addAll(['Milk', 'Wash dishes', 'Buy carrot']);
   }
 
   void _openMenu() {
@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushNamedAndRemoveUntil(context, Routs.auth, (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, Routs.landing, (route) => false);
                 },
                 child: Text('Main Page')),
             Padding(padding: EdgeInsets.symmetric(vertical: 10)),

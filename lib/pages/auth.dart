@@ -25,7 +25,7 @@ class _AuthState extends State<Auth> {
     if (isEmailValid && _password.isNotEmpty) {
       BaseUser? user = await _authService.signInWithEmail(_email.trim(), _password.trim());
       if(user != null ) {
-        Navigator.pushReplacementNamed(context, Routs.main);
+        Navigator.pushReplacementNamed(context, Routs.navigationScreen);
       }
       else {
         _notify.show(text: "Can't sign in. Please check email and password.", textColor: Colors.red);

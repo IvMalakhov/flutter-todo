@@ -1,28 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_todo/components/todo_item.dart';
 
-class HomeOnState extends StatefulWidget {
-  const HomeOnState({Key? key}) : super(key: key);
+class ListOnState extends StatefulWidget {
+  const ListOnState({Key? key}) : super(key: key);
 
   @override
-  State<HomeOnState> createState() => _HomeOnStateState();
+  State<ListOnState> createState() => _ListOnStateState();
 }
 
-class _HomeOnStateState extends State<HomeOnState> {
+class _ListOnStateState extends State<ListOnState> {
   List todoList = [];
   String _newTodo = '';
 
   @override
   void initState() {
-    // dynamic b = 7;
-    // b = 'sssss';
-    // String qqz = '';
-    // qqz = b;
-    // Object a = 5;
-    // a = 'sdsdsd';
-    // // qqz = a;
-    // (a as String).toUpperCase();
 
     super.initState();
     todoList.addAll(['Milk', 'Wash dishes', 'buy carrot']);
@@ -102,11 +93,18 @@ class _HomeOnStateState extends State<HomeOnState> {
 
   @override
   Widget build(BuildContext context) {
-    var map1 = Map<String, String>();
-    map1['a'] = 'a1';
-    map1['b'] = 'b2';
-    print('map1--${map1}');
-    print('map1--${map1.length}');
+    void onEdit({required int idItem, required String text}) {
+      _showAddEditModal(
+          text: todoList[idItem],
+          edit: true,
+          indexForEdit: idItem);
+    }
+    void onRemove({required int idItem}) {
+      setState(() {
+        todoList.removeAt(idItem);
+      });
+    }
+
 
     return Scaffold(
       backgroundColor: Colors.grey[900],
@@ -117,47 +115,19 @@ class _HomeOnStateState extends State<HomeOnState> {
       body: ListView.builder(
           itemCount: todoList.length,
           itemBuilder: (BuildContext context, int index) {
-            // print('context--${context}');
             return Dismissible(
               key: Key(todoList[index]),
-              child: Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(padding: EdgeInsets.only(left: 10)),
-                        Text(todoList[index]),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              _showAddEditModal(
-                                  text: todoList[index],
-                                  edit: true,
-                                  indexForEdit: index);
-                            },
-                            icon: Icon(Icons.edit)),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                todoList.removeAt(index);
-                              });
-                            },
-                            icon: Icon(Icons.delete)),
-                      ],
-                    ),
-                  ],
-                ),
+              child: TodoItem(
+                text: todoList[index],
+                itemId: index,
+                isSelected: false,
+                onEdit: onEdit,
+                onRemove: onRemove,
+                onSelect: ({required int idItem}) {},
               ),
+              direction: DismissDirection.startToEnd,
               onDismissed: (direction) {
-                if (direction == DismissDirection.startToEnd) {
-                  setState(() {
-                    todoList.removeAt(index);
-                  });
-                }
+                onRemove(idItem: index);
               },
             );
           }),

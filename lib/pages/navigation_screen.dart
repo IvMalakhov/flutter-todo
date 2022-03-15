@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/const/routs.dart';
+import 'package:flutter_todo/services/auth.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class NavigationScreen extends StatelessWidget {
+  const NavigationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService = AuthService();
     return Scaffold(
-      appBar: AppBar( title: Text('Welcome'),
+      appBar: AppBar(
+        title: const Text('Welcome!!!'),
+        actions: [
+          TextButton.icon(
+              onPressed: () {
+                _authService.signOut();
+                Navigator.pushReplacementNamed(context, Routs.landing);
+              },
+              icon: const Icon(Icons.logout , color: Colors.white,),
+              label: const Text('logout')
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -27,6 +40,14 @@ class MainScreen extends StatelessWidget {
                 Navigator.pushReplacementNamed(context,  Routs.todoOnState);
               },
               child: const Text('go to todo on state')
+          ),
+          ElevatedButton(
+              onPressed: (){
+                // Navigator.pushNamed(context, '/todo'); // have back button
+                // Navigator.pushNamedAndRemoveUntil(context, '/todo', (route)=>false); // if false haven't back button
+                Navigator.pushReplacementNamed(context,  Routs.test);
+              },
+              child: const Text('go to test')
           ),
         ],
       ),
