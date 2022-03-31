@@ -10,7 +10,7 @@ class NavigationScreen extends StatelessWidget {
     final AuthService _authService = AuthService();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome!!!'),
+        title: const Text('Welcome!'),
         actions: [
           TextButton.icon(
               onPressed: () {
@@ -35,16 +35,12 @@ class NavigationScreen extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: (){
-                // Navigator.pushNamed(context, '/todo'); // have back button
-                // Navigator.pushNamedAndRemoveUntil(context, '/todo', (route)=>false); // if false haven't back button
                 Navigator.pushReplacementNamed(context,  Routs.todoOnState);
               },
               child: const Text('go to todo on state')
           ),
           ElevatedButton(
               onPressed: (){
-                // Navigator.pushNamed(context, '/todo'); // have back button
-                // Navigator.pushNamedAndRemoveUntil(context, '/todo', (route)=>false); // if false haven't back button
                 Navigator.pushReplacementNamed(context,  Routs.test);
               },
               child: const Text('go to test')

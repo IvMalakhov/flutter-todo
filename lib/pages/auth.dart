@@ -76,6 +76,7 @@ class _AuthState extends State<Auth> {
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               TextField(
                 onChanged: (String value) => _password = value,
+                onSubmitted: (String value) => _onLogin(),
                 decoration: const InputDecoration(
                   label: Text('Password'),
                   prefixIcon: Padding(

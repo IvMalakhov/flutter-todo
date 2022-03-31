@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/components/todo_item.dart';
+import 'package:flutter_todo/components/add_edit_todo_modal.dart';
+import 'package:flutter_todo/layouts/todos_layout.dart';
+import 'package:uuid/uuid.dart';
+
+var _uuid = const Uuid();
 
 class ListOnState extends StatefulWidget {
   const ListOnState({Key? key}) : super(key: key);
@@ -8,137 +13,99 @@ class ListOnState extends StatefulWidget {
   State<ListOnState> createState() => _ListOnStateState();
 }
 
+class Todo {
+  String? uuid;
+  String? text;
+  bool selected = false;
+  DateTime? dateOfCreation;
+
+  Todo({this.text, DateTime? dateCreation}) {
+    dateOfCreation = dateCreation ?? DateTime.now();
+    uuid = _uuid.v4();
+  }
+}
+
 class _ListOnStateState extends State<ListOnState> {
-  List todoList = [];
-  String _newTodo = '';
+  List<Todo> todoList = [];
+  String todoText = '';
 
   @override
   void initState() {
-
     super.initState();
-    todoList.addAll(['Milk', 'Wash dishes', 'buy carrot']);
+    todoList.addAll([
+      Todo(text: 'Buy Milk'),
+      Todo(text: 'Wash dishes'),
+    ]);
   }
 
-  void _showAddEditModal(
-      {bool edit = false, String text = '', int? indexForEdit}) {
+  void onSuccess({int? itmId, required String text, bool isNew = false}) {
+    if (isNew) {
+      setState(() {
+        todoList.add(Todo(text: text));
+      });
+    } else if (itmId != null) {
+      setState(() {
+        todoList[itmId].text = text;
+      });
+    }
+  }
+
+  void showAddEditModal(
+      {bool isNew = true, String text = '', int? indexForEdit}) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('${edit ? 'Edit' : 'Add'} item'),
-            content: TextField(
-              controller: TextEditingController(text: text),
-              onChanged: (String value) {
-                _newTodo = value;
-              },
-            ),
-            actions: [
-              Row(
-                children: [
-                  OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.black),
-                      )),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (edit && indexForEdit != null) {
-                          setState(() {
-                            todoList[indexForEdit] = _newTodo;
-                          });
-                        } else {
-                          setState(() {
-                            todoList.add(_newTodo);
-                          });
-                        }
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Add')),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-            ],
-          );
+          return AddEditTodoModal(
+              isNew: isNew, text: text, id: indexForEdit, onSuccess: onSuccess);
         });
-  }
-
-  void _openMenu() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Menu'),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(padding: EdgeInsets.only(top: 10)),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/', (route) => false);
-                },
-                child: Text('Main Page')),
-            Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            Text('another menu items'),
-          ],
-        ),
-      );
-    }));
   }
 
   @override
   Widget build(BuildContext context) {
     void onEdit({required int idItem, required String text}) {
-      _showAddEditModal(
-          text: todoList[idItem],
-          edit: true,
+      showAddEditModal(
+          text: todoList[idItem].text ?? '',
+          isNew: false,
           indexForEdit: idItem);
     }
+
     void onRemove({required int idItem}) {
       setState(() {
         todoList.removeAt(idItem);
       });
     }
 
+    void onSelect({required int idItem}) {
+      setState(() {
+        todoList[idItem].selected = !todoList[idItem].selected;
+      });
+    }
 
-    return Scaffold(
-      backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        title: const Text('ToDo list on state'),
-        actions: [IconButton(onPressed: _openMenu, icon: Icon(Icons.menu))],
-      ),
-      body: ListView.builder(
-          itemCount: todoList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Dismissible(
-              key: Key(todoList[index]),
-              child: TodoItem(
-                text: todoList[index],
-                itemId: index,
-                isSelected: false,
-                onEdit: onEdit,
-                onRemove: onRemove,
-                onSelect: ({required int idItem}) {},
-              ),
-              direction: DismissDirection.startToEnd,
-              onDismissed: (direction) {
-                onRemove(idItem: index);
-              },
-            );
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddEditModal();
-        },
-        child: Icon(Icons.add_box_outlined),
-      ),
-    );
+    if (todoList.length > 3) {
+      print('todoList--${todoList[2].uuid}');
+    }
+
+    return TodosLayout(
+        title: 'Todo list on state',
+        showAddEditModal: showAddEditModal,
+        child: ListView.builder(
+            itemCount: todoList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Dismissible(
+                key: Key(todoList[index].uuid ?? '$index'),
+                child: TodoItem(
+                  text: todoList[index].text ?? '',
+                  itemId: index,
+                  isSelected: todoList[index].selected,
+                  onEdit: onEdit,
+                  onRemove: onRemove,
+                  onSelect: onSelect,
+                ),
+                direction: DismissDirection.startToEnd,
+                onDismissed: (direction) {
+                  onRemove(idItem: index);
+                },
+              );
+            }));
   }
 }
-
-// Icon(Icons.star, size: 50, color: Theme.of(context).colorScheme.secondary,)
