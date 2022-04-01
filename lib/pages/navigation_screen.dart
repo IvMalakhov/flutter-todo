@@ -54,6 +54,7 @@ class NavigationScreen extends StatelessWidget {
               },
               child: const Text('go to todo with FB')
           ),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
           const Divider(
             height: 5,
             color: Colors.black,
