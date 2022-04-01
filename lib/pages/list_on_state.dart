@@ -38,7 +38,7 @@ class _ListOnStateState extends State<ListOnState> {
     ]);
   }
 
-  void onSuccess({int? itmId, required String text, bool isNew = false}) {
+  void addEditTodo({int? itmId, String? uuid, required String text, bool isNew = false}) {
     if (isNew) {
       setState(() {
         todoList.add(Todo(text: text));
@@ -56,7 +56,7 @@ class _ListOnStateState extends State<ListOnState> {
         context: context,
         builder: (BuildContext context) {
           return AddEditTodoModal(
-              isNew: isNew, text: text, id: indexForEdit, onSuccess: onSuccess);
+              isNew: isNew, text: text, id: indexForEdit, onSuccess: addEditTodo);
         });
   }
 
@@ -79,10 +79,6 @@ class _ListOnStateState extends State<ListOnState> {
       setState(() {
         todoList[idItem].selected = !todoList[idItem].selected;
       });
-    }
-
-    if (todoList.length > 3) {
-      print('todoList--${todoList[2].uuid}');
     }
 
     return TodosLayout(

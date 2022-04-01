@@ -24,8 +24,29 @@ class NavigationScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Text('main screen'),
-          ElevatedButton(
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          const Text(
+            'This simple todo app for test flutter and dart. Auth implement on Firebase Authentication',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          const Text('This todo screen works on state and loose data if we reload page or rerun application:'),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          OutlinedButton(
+              onPressed: (){
+                Navigator.pushReplacementNamed(context,  Routs.todoOnState);
+              },
+              child: const Text('Go to todo on state')
+          ),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          const Divider(
+            height: 5,
+            color: Colors.black,
+          ),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          const Text('This todo screen save data to Firebase-Firestore'),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          OutlinedButton(
               onPressed: (){
                 // Navigator.pushNamed(context, '/todo'); // have back button
                 // Navigator.pushNamedAndRemoveUntil(context, '/todo', (route)=>false); // if false haven't back button
@@ -33,17 +54,18 @@ class NavigationScreen extends StatelessWidget {
               },
               child: const Text('go to todo with FB')
           ),
-          ElevatedButton(
-              onPressed: (){
-                Navigator.pushReplacementNamed(context,  Routs.todoOnState);
-              },
-              child: const Text('go to todo on state')
+          const Divider(
+            height: 5,
+            color: Colors.black,
           ),
-          ElevatedButton(
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          const Text('This sandbox screen for experiments'),
+          const Padding(padding: EdgeInsets.only(bottom: 10)),
+          OutlinedButton(
               onPressed: (){
                 Navigator.pushReplacementNamed(context,  Routs.test);
               },
-              child: const Text('go to test')
+              child: const Text('go to sandbox')
           ),
         ],
       ),

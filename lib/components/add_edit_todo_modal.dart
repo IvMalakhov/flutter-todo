@@ -4,11 +4,14 @@ class AddEditTodoModal extends StatelessWidget {
 
   int? id;
   bool isNew;
+  String? uuid;
   String? text;
-  final void Function({int? itmId, required String text, bool isNew}) onSuccess;
+  final void Function({int? itmId, String? uuid, required String text, bool isNew}) onSuccess;
+
   AddEditTodoModal({
     Key? key,
     required this.id,
+    this.uuid,
     this.isNew = false,
     this.text,
     required this.onSuccess
@@ -38,7 +41,7 @@ class AddEditTodoModal extends StatelessWidget {
                 )),
             ElevatedButton(
                 onPressed: () {
-                  onSuccess(itmId: id,text: todoText, isNew: isNew);
+                  onSuccess(itmId: id, uuid: uuid, text: todoText, isNew: isNew);
                   Navigator.of(context).pop();
                 },
                 child: Text(isNew ? 'Add' : 'Edit')),
